@@ -195,7 +195,7 @@ const Index = () => {
               <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
                 Register for our latest event.
               </p>
-              <Button href="/events/competitive-programming" size="lg">
+              <Button href="/events/Hackathon" size="lg">
                 Register Now
               </Button>
             </GlassCard>

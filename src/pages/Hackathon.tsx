@@ -22,13 +22,13 @@ const Hackathon = () => {
               JODC Featured Event
             </div>
 
-            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
               JODC <span className="text-secondary">HACKATHON</span>
               <br />
               <span className="text-primary">2026</span>
             </h1>
 
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            <p className="text-white/90 text-lg max-w-2xl mx-auto">
               A hybrid hackathon where students collaborate to build innovative tech solutions,
               develop working prototypes, and present them to a panel of judges.
             </p>
@@ -198,7 +198,7 @@ const Hackathon = () => {
               </h2>
 
               <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                Registrations open from 6–8 March. Submit your idea, build your
+                Registrations open. Submit your idea, build your
                 prototype, and compete with the best developers across both campuses.
               </p>
 

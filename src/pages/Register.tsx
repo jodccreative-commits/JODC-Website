@@ -37,7 +37,7 @@ const registrationSchema = z.object({
 type RegistrationForm = z.infer<typeof registrationSchema>;
 
 const GOOGLE_SCRIPT_URL =
-'https://script.google.com/macros/s/AKfycbxJx2DjbmxJ1nl3zzXzcauTlStln9y2FiOeDwtGyhYjqOWWbK0GXSMiTF5j1nt8Hsiq9A/exec';
+'https://script.google.com/macros/s/AKfycbxMd53iti-8ImlZOpmajUpvoLnVhwUl9FYW1RfL-QUFSLiq88I1fMOsVSgof8X6bYnmPQ/exec';
 const Register = () => {0
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);

@@ -1,284 +1,177 @@
-import { useState } from "react";
-import { CheckCircle, Loader2 } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { Calendar, Clock, Trophy, Award, MapPin, Users } from "lucide-react";
 import Layout from "@/components/Layout";
 import Button from "@/components/Button";
 import GlassCard from "@/components/GlassCard";
-import { toast } from "@/hooks/use-toast";
 
-const schema = z.object({
-  teamName: z.string().min(2, "Team name required"),
-
-  member1Name: z
-    .string()
-    .regex(/^[A-Za-z\s]+$/, "Only alphabets allowed"),
-
-  enrollment1: z
-    .string()
-    .regex(/^[0-9]+$/, "Numbers only"),
-
-  year1: z.enum(["1st", "2nd", "3rd", "4th"]),
-
-  email1: z.string().email("Invalid email"),
-
-  phone1: z
-    .string()
-    .regex(/^[0-9]{10}$/, "Phone must be 10 digits"),
-
-  member2Name: z
-    .string()
-    .regex(/^[A-Za-z\s]+$/, "Only alphabets allowed"),
-
-  enrollment2: z
-    .string()
-    .regex(/^[0-9]+$/, "Numbers only"),
-
-  year2: z.enum(["1st", "2nd", "3rd", "4th"]),
-
-  email2: z.string().email("Invalid email"),
-
-  phone2: z
-    .string()
-    .regex(/^[0-9]{10}$/, "Phone must be 10 digits"),
-});
-
-type FormData = z.infer<typeof schema>;
-
-const GOOGLE_SCRIPT_URL =
-"https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
-
-const TechCharadesRegister = () => {
-
-  const [loading,setLoading] = useState(false);
-  const [submitted,setSubmitted] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    formState:{errors}
-  } = useForm<FormData>({
-    resolver:zodResolver(schema)
-  });
-
-  const onSubmit = async (data:FormData)=>{
-
-    setLoading(true);
-
-    try{
-
-      const payload = new URLSearchParams({
-
-        teamName: data.teamName,
-
-        member1Name: data.member1Name,
-        enrollment1: data.enrollment1,
-        year1: data.year1,
-        email1: data.email1,
-        phone1: data.phone1,
-
-        member2Name: data.member2Name,
-        enrollment2: data.enrollment2,
-        year2: data.year2,
-        email2: data.email2,
-        phone2: data.phone2
-      });
-
-      await fetch(GOOGLE_SCRIPT_URL,{
-        method:"POST",
-        mode:"no-cors",
-        body:payload
-      });
-
-      setSubmitted(true);
-
-      toast({
-        title:"Registered Successfully 🎭",
-        description:"Your team has been registered for Tech Charades"
-      });
-
-    }catch{
-
-      toast({
-        title:"Registration Failed",
-        description:"Please try again later",
-        variant:"destructive"
-      });
-
-    }finally{
-      setLoading(false);
-    }
-
-  };
-
-  if(submitted){
-    return(
-      <Layout>
-        <section className="py-20 flex justify-center">
-          <GlassCard className="p-12 text-center max-w-md">
-            <CheckCircle className="w-20 h-20 text-secondary mx-auto mb-6"/>
-            <h2 className="text-3xl font-bold mb-4">
-              TEAM <span className="text-secondary">REGISTERED</span>
-            </h2>
-            <p className="mb-6">
-              Your Tech Charades registration is confirmed.
-            </p>
-            <Button href="/">Back to Home</Button>
-          </GlassCard>
-        </section>
-      </Layout>
-    )
-  }
-
-  return(
-
+const TechCharades = () => {
+  return (
     <Layout>
+      <section className="py-20 px-4 min-h-screen">
+        <div className="container mx-auto max-w-5xl">
 
-      <section className="py-20 px-4">
+          {/* Hero Section */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 text-secondary text-sm font-semibold uppercase tracking-wider mb-6">
+              <Users className="w-4 h-4" />
+              Fun Tech Event
+            </div>
 
-        <div className="container mx-auto max-w-xl">
+            <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-lg mb-4">
+              TECH <span className="text-secondary">CHARADES</span>
+            </h1>
 
-          <GlassCard className="p-10">
+            <p className="text-primary text-xl font-semibold mb-4">
+              Fun Tech Event (Duos)
+            </p>
 
-            <h2 className="text-2xl font-bold mb-6 text-center">
-              TECH CHARADES REGISTRATION
-            </h2>
+            <p className="text-white/90 text-lg max-w-2xl mx-auto">
+              A fast paced dumb charades game with a tech twist where teams
+              compete to guess technology-related concepts through actions.
+            </p>
+          </motion.div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* Event Details */}
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
 
-              {/* Team Name */}
+            {/* Date */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <GlassCard className="p-8 text-center h-full">
+                <Calendar className="w-10 h-10 text-primary mx-auto mb-4" />
+                <h3 className="font-heading text-xl font-bold mb-2">Date</h3>
+                <p className="text-secondary font-semibold">
+                  15 March 2026
+                </p>
+              </GlassCard>
+            </motion.div>
 
-              <div>
-                <input
-                  {...register("teamName")}
-                  placeholder="Team Name"
-                  className="input w-full"
-                />
-                {errors.teamName && (
-                  <p className="text-red-500 text-sm">{errors.teamName.message}</p>
-                )}
+            {/* Time */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <GlassCard className="p-8 text-center h-full">
+                <Clock className="w-10 h-10 text-secondary mx-auto mb-4" />
+                <h3 className="font-heading text-xl font-bold mb-2">Time</h3>
+                <p className="text-secondary font-semibold">
+                  11:00 AM – 2:00 PM
+                </p>
+              </GlassCard>
+            </motion.div>
+
+            {/* Venue */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <GlassCard className="p-8 text-center h-full">
+                <MapPin className="w-10 h-10 text-secondary mx-auto mb-4" />
+                <h3 className="font-heading text-xl font-bold mb-2">Venue</h3>
+                <p className="text-secondary font-semibold">
+                  LT
+                </p>
+              </GlassCard>
+            </motion.div>
+
+          </div>
+
+          {/* Event Format */}
+          <motion.div
+            className="mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <GlassCard className="p-8">
+              <h2 className="font-heading text-2xl font-bold text-center mb-6">
+                EVENT <span className="text-secondary">FORMAT</span>
+              </h2>
+
+              <ul className="space-y-4 max-w-xl mx-auto text-muted-foreground">
+                <li>• Participants compete in teams of two</li>
+                <li>• Act out tech-related words or concepts</li>
+                <li>• Teammate must guess within the time limit</li>
+                <li>• Highest scoring team wins</li>
+              </ul>
+            </GlassCard>
+          </motion.div>
+
+          {/* Prizes */}
+          <motion.div
+            className="mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <GlassCard className="p-8">
+              <h2 className="font-heading text-2xl font-bold text-center mb-6">
+                CERTIFICATES & <span className="text-secondary">PRIZES</span>
+              </h2>
+
+              <div className="grid md:grid-cols-2 gap-6">
+
+                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/30">
+                  <Award className="w-10 h-10 text-primary flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">E-Certificates</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Provided to all participants
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-4 rounded-lg bg-muted/30">
+                  <Trophy className="w-10 h-10 text-secondary flex-shrink-0" />
+                  <div>
+                    <h4 className="font-semibold">Prize Pool</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Exciting prizes for the winning team
+                    </p>
+                  </div>
+                </div>
+
               </div>
+            </GlassCard>
+          </motion.div>
 
-              <h3 className="font-bold text-lg mt-6">Member 1</h3>
+          {/* CTA */}
+          <motion.div
+            className="text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <GlassCard className="p-10">
+              <h2 className="font-heading text-3xl font-bold mb-4">
+                THINK FAST. ACT FAST. <span className="text-secondary">GUESS FASTER.</span>
+              </h2>
 
-              <input
-                {...register("member1Name")}
-                placeholder="Name"
-                className="input"
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^A-Za-z\s]/g,"")
-                }}
-              />
+              <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+                Team up with your partner and compete in a fun tech-themed
+                charades challenge at Converge ’26.
+              </p>
 
-              <input
-                {...register("enrollment1")}
-                placeholder="Enrollment Number"
-                className="input"
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^0-9]/g,"")
-                }}
-              />
-
-              <select {...register("year1")} className="input">
-                <option value="">Select Year</option>
-                <option value="1st">1st Year</option>
-                <option value="2nd">2nd Year</option>
-                <option value="3rd">3rd Year</option>
-                <option value="4th">4th Year</option>
-              </select>
-
-              <input
-                {...register("email1")}
-                placeholder="Email"
-                className="input"
-              />
-
-              <input
-                {...register("phone1")}
-                placeholder="Phone Number"
-                className="input"
-                maxLength={10}
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^0-9]/g,"")
-                }}
-              />
-
-              <h3 className="font-bold text-lg mt-6">Member 2</h3>
-
-              <input
-                {...register("member2Name")}
-                placeholder="Name"
-                className="input"
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^A-Za-z\s]/g,"")
-                }}
-              />
-
-              <input
-                {...register("enrollment2")}
-                placeholder="Enrollment Number"
-                className="input"
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^0-9]/g,"")
-                }}
-              />
-
-              <select {...register("year2")} className="input">
-                <option value="">Select Year</option>
-                <option value="1st">1st Year</option>
-                <option value="2nd">2nd Year</option>
-                <option value="3rd">3rd Year</option>
-                <option value="4th">4th Year</option>
-              </select>
-
-              <input
-                {...register("email2")}
-                placeholder="Email"
-                className="input"
-              />
-
-              <input
-                {...register("phone2")}
-                placeholder="Phone Number"
-                className="input"
-                maxLength={10}
-                onInput={(e)=>{
-                  e.currentTarget.value =
-                  e.currentTarget.value.replace(/[^0-9]/g,"")
-                }}
-              />
-
-              <Button type="submit" disabled={loading} className="w-full">
-
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin"/>
-                    Submitting...
-                  </>
-                ):(
-                  "Register Team"
-                )}
-
+              <Button href="/events/register2" size="lg">
+                Register Now
               </Button>
-
-            </form>
-
-          </GlassCard>
+            </GlassCard>
+          </motion.div>
 
         </div>
-
       </section>
-
     </Layout>
+  );
+};
 
-  )
-
-}
-
-export default TechCharadesRegister;
+export default TechCharades;

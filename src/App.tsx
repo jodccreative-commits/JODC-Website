@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/events/bug-bounty" element={<ComingSoon />} />
           <Route path="/events/flag-quest" element={<FlagQuest />} />
           <Route path="/events/TechCharades" element={<TechCharades />} />
-          <Route path="/events/TechCharades/register" element={<TechCharadesRegister />} />
+          <Route path="/events/register2" element={<TechCharadesRegister />} />
           <Route path="/converge" element={<Converge />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/register" element={<Register />} />

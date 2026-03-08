@@ -27,7 +27,7 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const GOOGLE_SCRIPT_URL =
-"https://script.google.com/macros/s/AKfycbwT1c1sl4GfChCTWql8bWq3puOvVMrAHz6CE3i7L9nr0xyIDSaxSP6Mkyr1LYy5-zHxmw/exec";
+"https://script.google.com/macros/s/AKfycbzSm5-_pc9wReB7GtL9YqJlFUVZkosT6e10HqIGXBzM9lSdTyYrtFUHmWxHZtfCh03C7w/exec";
 
 const TechCharadesRegister = () => {
 

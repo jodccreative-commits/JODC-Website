@@ -9,41 +9,40 @@ import GlassCard from '@/components/GlassCard';
 import { toast } from '@/hooks/use-toast';
 
 const registrationSchema = z.object({
-  teamName: z.string().min(2),
+  name: z
+    .string()
+    .min(2, "Name is required")
+    .regex(/^[A-Za-z\s]+$/, "Only alphabets allowed"),
 
-  repName: z.string().min(2),
-  repEnrollment: z.string().min(5),
-  year: z.string().min(1),
-  campus: z.enum(['62', '128']),
-  email: z.string().email(),
-  repDiscord: z.string().min(2),
+  enrollment: z
+    .string()
+    .regex(/^[0-9]+$/, "Enrollment must contain only numbers"),
 
-  member2Name: z.string().optional(),
-  member2Enrollment: z.string().optional(),
-  member2Email: z.string().optional(),
-  member2Discord: z.string().optional(),
+  year: z.enum(["1st", "2nd", "3rd", "4th"], {
+    required_error: "Please select your year",
+  }),
 
-  member3Name: z.string().optional(),
-  member3Enrollment: z.string().optional(),
-  member3Email: z.string().optional(),
-  member3Discord: z.string().optional(),
+  email: z.string().email("Enter a valid email"),
 
-  member4Name: z.string().optional(),
-  member4Enrollment: z.string().optional(),
-  member4Email: z.string().optional(),
-  member4Discord: z.string().optional(),
+  phone: z
+    .string()
+    .regex(/^[0-9]{10}$/, "Phone number must be exactly 10 digits"),
 });
 
 type RegistrationForm = z.infer<typeof registrationSchema>;
 
 const GOOGLE_SCRIPT_URL =
-'https://script.google.com/macros/s/AKfycbxaPLzp4KkxPVtsc7FxRzlu3W5CwJ7JW1T8wLe-Wyiidn44dbxRhrdhDh5w4o6Lf_F6WQ/exec';
-const Register = () => {0
-  const [step, setStep] = useState(1);
+  "https://script.google.com/macros/s/AKfycbwT1c1sl4GfChCTWql8bWq3puOvVMrAHz6CE3i7L9nr0xyIDSaxSP6Mkyr1LYy5-zHxmw/exec";
+
+const Register = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit } = useForm<RegistrationForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegistrationForm>({
     resolver: zodResolver(registrationSchema),
   });
 
@@ -51,51 +50,34 @@ const Register = () => {0
     setIsLoading(true);
 
     try {
-
       const payload = new URLSearchParams({
-        teamName: data.teamName,
 
-        repName: data.repName,
-        repEnrollment: data.repEnrollment,
+          event:"ctf",
+
+        name: data.name,
+        enrollment: data.enrollment,
         year: data.year,
-        campus: data.campus === '62' ? 'Sector 62' : 'Sector 128',
         email: data.email,
-        repDiscord: data.repDiscord,
-
-        member2Name: data.member2Name || '',
-        member2Enrollment: data.member2Enrollment || '',
-        member2Email: data.member2Email || '',
-        member2Discord: data.member2Discord || '',
-
-        member3Name: data.member3Name || '',
-        member3Enrollment: data.member3Enrollment || '',
-        member3Email: data.member3Email || '',
-        member3Discord: data.member3Discord || '',
-
-        member4Name: data.member4Name || '',
-        member4Enrollment: data.member4Enrollment || '',
-        member4Email: data.member4Email || '',
-        member4Discord: data.member4Discord || '',
+        phone: data.phone,
       });
 
       await fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
+        method: "POST",
+        mode: "no-cors",
         body: payload,
       });
 
       setIsSubmitted(true);
 
       toast({
-        title: 'Registration Successful 🚀',
-        description: 'Your team has been registered.',
+        title: "Registration Successful 🚀",
+        description: "Your registration has been recorded.",
       });
-
     } catch {
       toast({
-        title: 'Registration Failed',
-        description: 'Please try again later.',
-        variant: 'destructive',
+        title: "Registration Failed",
+        description: "Please try again later.",
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -109,9 +91,9 @@ const Register = () => {0
           <GlassCard className="p-12 text-center max-w-md">
             <CheckCircle className="w-20 h-20 text-secondary mx-auto mb-6" />
             <h2 className="text-3xl font-bold mb-4">
-              TEAM <span className="text-secondary">REGISTERED</span>
+              <span className="text-secondary">REGISTERED</span>
             </h2>
-            <p className="mb-6">Your hackathon registration is confirmed.</p>
+            <p className="mb-6">Your event registration is confirmed.</p>
             <Button href="/">Back to Home</Button>
           </GlassCard>
         </section>
@@ -124,111 +106,118 @@ const Register = () => {0
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-xl">
 
-          <GlassCard className="p-10 max-w-xl mx-auto">
+          <GlassCard className="p-10">
 
-            <div className="mb-6 text-center text-sm text-muted-foreground">
-              Step {step} of 4
-            </div>
+            <h2 className="text-2xl font-bold mb-6 text-center">
+              EVENT REGISTRATION
+            </h2>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
-              {step === 1 && (
-                <>
-                  <input {...register('teamName')} placeholder="Team Name" className="input"/>
+              {/* Name */}
+              <div>
+                <input
+                  {...register("name")}
+                  placeholder="Full Name"
+                  className="input w-full"
+                  pattern="[A-Za-z\s]+"
+                  onInput={(e) => {
+                    e.currentTarget.value =
+                      e.currentTarget.value.replace(/[^A-Za-z\s]/g, "");
+                  }}
+                />
+                {errors.name && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
 
-                  <input {...register('repName')} placeholder="Team Representative Name" className="input"/>
+              {/* Enrollment */}
+              <div>
+                <input
+                  {...register("enrollment")}
+                  placeholder="Enrollment Number"
+                  className="input w-full"
+                  inputMode="numeric"
+                  onInput={(e) => {
+                    e.currentTarget.value =
+                      e.currentTarget.value.replace(/[^0-9]/g, "");
+                  }}
+                />
+                {errors.enrollment && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.enrollment.message}
+                  </p>
+                )}
+              </div>
 
-                  <input {...register('repEnrollment')} placeholder="Enrollment Number" className="input"/>
+              {/* Year */}
+              <div>
+                <select {...register("year")} className="input w-full">
+                  <option value="">Select Year</option>
+                  <option value="1st">1st Year</option>
+                  <option value="2nd">2nd Year</option>
+                  <option value="3rd">3rd Year</option>
+                  <option value="4th">4th Year</option>
+                </select>
+                {errors.year && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.year.message}
+                  </p>
+                )}
+              </div>
 
-                  <select {...register('year')} className="input">
-                    <option value="">Select Year</option>
-                    <option value="1st">1st Year</option>
-                    <option value="2nd">2nd Year</option>
-                    <option value="3rd">3rd Year</option>
-                    <option value="4th">4th Year</option>
-                  </select>
+              {/* Email */}
+              <div>
+                <input
+                  type="email"
+                  {...register("email")}
+                  placeholder="Email Address"
+                  className="input w-full"
+                />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
 
-                  <select {...register('campus')} className="input">
-                    <option value="">Select Campus</option>
-                    <option value="62">Sector 62</option>
-                    <option value="128">Sector 128</option>
-                  </select>
+              {/* Phone */}
+              <div>
+                <input
+                  {...register("phone")}
+                  placeholder="Phone Number"
+                  className="input w-full"
+                  maxLength={10}
+                  inputMode="numeric"
+                  onInput={(e) => {
+                    e.currentTarget.value =
+                      e.currentTarget.value.replace(/[^0-9]/g, "");
+                  }}
+                />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.phone.message}
+                  </p>
+                )}
+              </div>
 
-                  <input {...register('email')} placeholder="Representative Email" className="input"/>
-
-                  <input {...register('repDiscord')} placeholder="Representative Discord Username" className="input"/>
-
-                  <Button type="button" onClick={()=>setStep(2)}>
-                    Next
-                  </Button>
-                </>
-              )}
-
-              {step === 2 && (
-                <>
-                  <h3 className="font-bold">Member 2</h3>
-
-                  <input {...register('member2Name')} placeholder="Name" className="input"/>
-                  <input {...register('member2Enrollment')} placeholder="Enrollment No" className="input"/>
-                  <input {...register('member2Email')} placeholder="Email" className="input"/>
-                  <input {...register('member2Discord')} placeholder="Discord Username" className="input"/>
-
-                  <div className="flex gap-4">
-                    <Button type="button" onClick={()=>setStep(1)}>Back</Button>
-                    <Button type="button" onClick={()=>setStep(3)}>Next</Button>
-                  </div>
-                </>
-              )}
-
-              {step === 3 && (
-                <>
-                  <h3 className="font-bold">Member 3</h3>
-
-                  <input {...register('member3Name')} placeholder="Name" className="input"/>
-                  <input {...register('member3Enrollment')} placeholder="Enrollment No" className="input"/>
-                  <input {...register('member3Email')} placeholder="Email" className="input"/>
-                  <input {...register('member3Discord')} placeholder="Discord Username" className="input"/>
-
-                  <div className="flex gap-4">
-                    <Button type="button" onClick={()=>setStep(2)}>Back</Button>
-                    <Button type="button" onClick={()=>setStep(4)}>Next</Button>
-                  </div>
-                </>
-              )}
-
-              {step === 4 && (
-                <>
-                  <h3 className="font-bold">Member 4</h3>
-
-                  <input {...register('member4Name')} placeholder="Name" className="input"/>
-                  <input {...register('member4Enrollment')} placeholder="Enrollment No" className="input"/>
-                  <input {...register('member4Email')} placeholder="Email" className="input"/>
-                  <input {...register('member4Discord')} placeholder="Discord Username" className="input"/>
-
-                  <div className="flex gap-4">
-
-                    <Button type="button" onClick={()=>setStep(3)}>
-                      Back
-                    </Button>
-
-                    <Button type="submit" disabled={isLoading}>
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin"/>
-                          Submitting...
-                        </>
-                      ) : (
-                        'Submit Registration'
-                      )}
-                    </Button>
-
-                  </div>
-                </>
-              )}
+              <Button type="submit" disabled={isLoading} className="w-full">
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Register"
+                )}
+              </Button>
 
             </form>
 
           </GlassCard>
+
         </div>
       </section>
     </Layout>

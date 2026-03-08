@@ -58,12 +58,12 @@ const Header = () => {
               </Link>
             ))}
 
-            {/* Hackathon Register Button */}
+            {/* Converge Register Button */}
             <Link
-              to="/register"
+              to="/events?featured=true"
               className="ml-4 px-4 py-2 rounded-md bg-secondary text-black font-semibold text-sm uppercase tracking-wide hover:bg-secondary/80 transition"
             >
-              Register for Hackathon
+              Register for Converge
             </Link>
 
           </nav>
@@ -107,11 +107,11 @@ const Header = () => {
 
               {/* Mobile Register Button */}
               <Link
-                to="/register"
+                to="/events?featured=true"
                 onClick={() => setIsOpen(false)}
                 className="mt-2 px-4 py-2 text-center rounded-md bg-secondary text-black font-semibold uppercase tracking-wide hover:bg-secondary/80 transition"
               >
-                Register for Hackathon
+                Register for Converge
               </Link>
 
             </nav>

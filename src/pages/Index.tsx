@@ -7,10 +7,23 @@ import { Code, Users, Rocket, Terminal } from 'lucide-react';
 
 const events = [
   {
+    title: 'Flag Quest (CTF)',
+    description: 'A Capture The Flag (CTF) cybersecurity competition organized by JODC where participants solve security challenges, uncover hidden flags, and compete on a live leaderboard to test their hacking and problem-solving skills.',
+    date: '14th March 2026',
+    feautured: true,
+    href: '/events/flag-quest',
+  },
+  {
+  title: 'Tech Charades',
+  description: 'A fast-paced dumb charades game with a tech twist where teams of two act out technology-related concepts and compete to guess them within the time limit.',
+  date: '15th March 2026',
+  featured: true,
+  href: '/events/TechCharades',
+   },
+  {
     title: 'Hackathon',
-    description: 'A hybrid hackathon organized by JODC where students from both campuses collaborate to build innovative tech solutions and present their prototypes in a competitive final showcase.',
-    date: '12th - 14th March',
-    featured: true,
+    description: 'A hackathon organized by JODC where students build innovative tech solutions and present their prototypes in a competitive final showcase.',
+    date: 'Coming Soon',
     href: '/events/hackathon',
   },
   {
@@ -24,12 +37,6 @@ const events = [
     description: 'Dive into ethical hacking fundamentals, bug bounty ecosystem, and vulnerability discovery basics.',
     date: 'Coming Soon',
     href: '/events/bug-bounty',
-  },
-  {
-    title: 'Capture the Flag',
-    description: 'A cybersecurity competition where teams solve challenges and capture flags to score points.',
-    date: 'Coming Soon',
-    href: '/events/capture-the-flag',
   },
 ];
 
@@ -189,16 +196,20 @@ const Index = () => {
             transition={{ duration: 0.6 }}
           >
             <GlassCard className="p-8 md:p-16 text-center">
-              <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">
-                READY TO <span className="text-secondary">CODE</span>?
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
-                Register for our latest event.
-              </p>
-              <Button href="/events/Hackathon" size="lg">
-                Register Now
-              </Button>
-            </GlassCard>
+  <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-6">
+    JOIN THE <span className="text-secondary">JODC CORE TEAM</span>
+  </h2>
+
+  <p className="text-muted-foreground text-lg max-w-xl mx-auto mb-8">
+    Passionate about technology, development, and cybersecurity?  
+    Become a part of the JODC core team and help organize workshops, hackathons, 
+    and tech events that shape the campus tech community.
+  </p>
+
+  <Button href="/coming-soon" size="lg">
+    Apply Now
+  </Button>
+</GlassCard>
           </motion.div>
         </div>
       </section>

@@ -167,6 +167,11 @@ const FlagQuest = () => {
               <Button href="/register" size="lg">
                 Register Now
               </Button>
+
+              <Button href="/flag-submit" size="lg" variant="secondary">
+               Submit Flags
+               </Button>
+
             </GlassCard>
           </motion.div>
 

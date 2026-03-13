@@ -13,6 +13,7 @@ import TechCharades from "./pages/TechCharades";
 import TechCharadesRegister from "./pages/TechCharadesRegister"; 
 import Converge from "./pages/Converge";
 import Register from "./pages/Register";
+import FlagSubmit from "./pages/FlagSubmit";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
           <Route path="/events/flag-quest" element={<FlagQuest />} />
           <Route path="/events/TechCharades" element={<TechCharades />} />
           <Route path="/events/register2" element={<TechCharadesRegister />} />
+          <Route path="/flag-submit" element={<FlagSubmit />} />
           <Route path="/converge" element={<Converge />} />
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/register" element={<Register />} />
